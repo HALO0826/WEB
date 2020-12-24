@@ -26,6 +26,7 @@ router.get('/', (req, res, next) => {
  */
 router.get('/api/homecasual', (req, res) => {
     let sqlStr = 'SELECT * FROM homecasual';
+    console.log("请求轮播图")
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
             res.json({err_code: 0, message: '请求轮播图数据失败'});
@@ -328,6 +329,7 @@ router.post('/api/login_pwd', (req, res) => {
 	// console.log(req.session.captcha);
 	// console.log(tmp_captcha);
     // 获取数据
+    console.log("pwd = "+req.body.pwd + " username = "+req.body.name);
 	const user_name = req.body.name;
     const user_pwd = md5(md5(req.body.pwd) + S_KEY);
     const captcha = req.body.captcha.toLowerCase();
