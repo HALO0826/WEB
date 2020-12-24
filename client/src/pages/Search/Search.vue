@@ -21,6 +21,13 @@
         <div class="pro_show">
 
           <ProductItem v-for="(goods) in recommendshoplist" :key="goods.goods_id" :pro="goods"/>
+          <waterfall :col="4" :width="itemWidth":gutterWidth="gutterWidth" : data="mdata">
+            <template>
+              <div v-for="(index) in mdata":key="mdata">
+                <p>{{index}}</p>
+              </div>
+            </template>
+          </waterfall>
 
       </div>
     </div>
@@ -46,6 +53,7 @@
         activeIndex: 1,  // 当前页码
 			currentCate: 1,  // 当前分类
 			pageSize: 3,
+        mdata:[1,2,3,4,5,6,7,8,9],
       }
     },
     components: {
