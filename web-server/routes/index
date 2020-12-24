@@ -60,8 +60,8 @@ router.get('/api/category', (req, res) => {
 router.post('/api/searchgoods', (req, res) => {
     // 获取参数
     let keywords = req.body.keywords;
-	keywords = keywords.replace(/\s+/g, ' ');
-	keywords = keywords.replace(/(^\s*)|(\s*$)/g, '');
+    keywords = keywords.replace(/\s+/g, ' ');
+    keywords = keywords.replace(/(^\s*)|(\s*$)/g, '');
     let keyArr = keywords.split(' ');
     let sqlStr = 'SELECT * FROM recommend WHERE goods_name LIKE ';  // sql语句
     keyArr.forEach((item, index, arr)=>{
@@ -86,7 +86,7 @@ router.post('/api/searchgoods', (req, res) => {
  */
 router.get('/api/recommendshoplist', (req, res) => {
     // 获取参数
-	let category = req.query.category || 1
+    let category = req.query.category || 1
     let pageNo = req.query.pageNo || 1;
     let pageSize = req.query.count || 3;
 
@@ -94,7 +94,7 @@ router.get('/api/recommendshoplist', (req, res) => {
 
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '请求商品列表数据失败'});
         } else {
             results = JSON.parse(JSON.stringify(results));
@@ -112,7 +112,7 @@ router.get('/api/allgoods', (req, res) => {
 
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '请求商品数据失败'});
         } else {
             results = JSON.parse(JSON.stringify(results));
@@ -127,8 +127,8 @@ router.get('/api/allgoods', (req, res) => {
 router.get('/api/homeshoplist', (req, res) => {
     // 获取总分类
     let cateSqlStr = 'SELECT COUNT(*) FROM category';
-	conn.query(cateSqlStr, (error, results, fields) => {
-		if (!error) {
+    conn.query(cateSqlStr, (error, results, fields) => {
+        if (!error) {
             let sqlStr = '';
             for(let i=0; i < results[0]['COUNT(*)']; i++){
                 sqlStr += 'SELECT * FROM recommend WHERE category = ' + (i+1) + ' LIMIT 3;';
@@ -139,8 +139,8 @@ router.get('/api/homeshoplist', (req, res) => {
                     res.json({success_code: 200, message: results});
                 }
             });
-		}
-	});
+        }
+    });
 });
 
 /**
@@ -149,61 +149,61 @@ router.get('/api/homeshoplist', (req, res) => {
 router.get('/api/goodsdetail', (req, res) => {
     // 获取参数
     let goodsNo = req.query.goodsNo;
-	let sqlStr = 'SELECT * FROM recommend WHERE goods_id = ' + goodsNo;
-	conn.query(sqlStr, (error, results, fields) => {
-		if (!error) {
+    let sqlStr = 'SELECT * FROM recommend WHERE goods_id = ' + goodsNo;
+    conn.query(sqlStr, (error, results, fields) => {
+        if (!error) {
             results = JSON.parse(JSON.stringify(results));
-			res.json({success_code: 200, message: results});
-		}
-	});
+            res.json({success_code: 200, message: results});
+        }
+    });
 });
 
 /**
  * 获取商品评价
- */ 
+ */
 router.get('/api/goodscomment', (req, res) => {
     // 获取参数
     let goodsId = req.query.goodsId;
 
-	let sqlStr = 'SELECT user_info.id, user_info.user_name, user_info.user_nickname, comments.comment_detail, comments.comment_id, comments.comment_rating, comments.goods_id FROM user_info INNER JOIN comments ON user_info.id = comments.user_id WHERE goods_id = ' + goodsId;
-	conn.query(sqlStr, (error, results, fields) => {
-		if (!error) {
+    let sqlStr = 'SELECT user_info.id, user_info.user_name, user_info.user_nickname, comments.comment_detail, comments.comment_id, comments.comment_rating, comments.goods_id FROM user_info INNER JOIN comments ON user_info.id = comments.user_id WHERE goods_id = ' + goodsId;
+    conn.query(sqlStr, (error, results, fields) => {
+        if (!error) {
             results = JSON.parse(JSON.stringify(results));
-			res.json({success_code: 200, message: results});
-		}
-	});
+            res.json({success_code: 200, message: results});
+        }
+    });
 });
 
 /**
-  评论商品
-*/
+ 评论商品
+ */
 router.post('/api/postcomment', (req, res) => {
-	// 获取参数
-	let goods_id = req.body.goods_id;
-	let comment_detail = req.body.comment_detail;
-	let comment_rating = req.body.comment_rating;
-	let user_id = req.body.user_id;
+    // 获取参数
+    let goods_id = req.body.goods_id;
+    let comment_detail = req.body.comment_detail;
+    let comment_rating = req.body.comment_rating;
+    let user_id = req.body.user_id;
     const addSql = "INSERT INTO comments(goods_id, comment_detail, comment_rating, user_id) VALUES (?, ?, ?, ?)";
     const addSqlParams = [goods_id, comment_detail, comment_rating, user_id];
     conn.query(addSql, addSqlParams, (error, results, fields) => {
         results = JSON.parse(JSON.stringify(results));
         if (!error) {
-          // 更新数据
-          let sqlStr = "UPDATE recommend SET comments_count = comments_count + 1 WHERE goods_id = " + goods_id;
-          conn.query(sqlStr, (error, results, fields) => {
-            if (error) {
-              console.log(error);
-            } else {
-              res.json({success_code: 200, message: "发布成功"});
-            }
-          });
+            // 更新数据
+            let sqlStr = "UPDATE recommend SET comments_count = comments_count + 1 WHERE goods_id = " + goods_id;
+            conn.query(sqlStr, (error, results, fields) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    res.json({success_code: 200, message: "发布成功"});
+                }
+            });
         }
-     });
+    });
 });
 
 /**
  一次性图形验证码
-*/
+ */
 router.get('/api/captcha', (req, res) => {
     // 生成随机验证码
     let captcha = svgCaptcha.create({
@@ -215,7 +215,7 @@ router.get('/api/captcha', (req, res) => {
 
     // 保存
     req.session.captcha = captcha.text.toLocaleLowerCase();
-	tmp_captcha = captcha.text.toLocaleLowerCase();
+    tmp_captcha = captcha.text.toLocaleLowerCase();
 
     // 返回客户端
     res.type('svg');
@@ -223,8 +223,8 @@ router.get('/api/captcha', (req, res) => {
 });
 
 /**
-  发送验证码短信
-*/
+ 发送验证码短信
+ */
 router.get('/api/send_code', (req, res) => {
     // 获取手机号码
     let phone = req.query.phone;
@@ -248,8 +248,8 @@ router.get('/api/send_code', (req, res) => {
 });
 
 /**
-  手机验证码登录
-*/
+ 手机验证码登录
+ */
 router.post('/api/login_code', (req, res) => {
     // 获取数据
     const phone = req.body.phone;
@@ -268,25 +268,25 @@ router.post('/api/login_code', (req, res) => {
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
             res.json({err_code: 0, message: '查询失败'});
-			console.log(error);
+            console.log(error);
         } else {
             results = JSON.parse(JSON.stringify(results));
             if (results[0]) {  // 用户已经存在
                 req.session.userId = results[0].id;
-                
+
                 res.json({
                     success_code: 200,
                     message: {
-						id: results[0].id,
+                        id: results[0].id,
                         user_name: results[0].user_name,
                         user_nickname: results[0].user_nickname || '',
                         user_phone: results[0].user_phone,
-						user_sex: results[0].user_sex,
-						user_address: results[0].user_address,
-						user_sign: results[0].user_sign,
+                        user_sex: results[0].user_sex,
+                        user_address: results[0].user_address,
+                        user_sign: results[0].user_sign,
                         user_birthday: results[0].user_birthday,
                         user_avatar: results[0].user_avatar
-					}
+                    }
                 });
             } else { // 新用户
                 const addSql = "INSERT INTO user_info(user_name, user_phone, user_avatar) VALUES (?, ?, ?)";
@@ -302,7 +302,7 @@ router.post('/api/login_code', (req, res) => {
                                 console.log(error);
                             } else {
                                 results = JSON.parse(JSON.stringify(results));
-                                
+
                                 res.json({
                                     success_code: 200,
                                     message: {
@@ -326,11 +326,11 @@ router.post('/api/login_code', (req, res) => {
  * 用户名和密码登录
  */
 router.post('/api/login_pwd', (req, res) => {
-	// console.log(req.session.captcha);
-	// console.log(tmp_captcha);
+    // console.log(req.session.captcha);
+    // console.log(tmp_captcha);
     // 获取数据
     console.log("pwd = "+req.body.pwd + " username = "+req.body.name);
-	const user_name = req.body.name;
+    const user_name = req.body.name;
     const user_pwd = md5(md5(req.body.pwd) + S_KEY);
     const captcha = req.body.captcha.toLowerCase();
 
@@ -341,7 +341,7 @@ router.post('/api/login_pwd', (req, res) => {
     }
 
     tmp_captcha = '';
-    
+
     // 查询数据
     let sqlStr = "SELECT * FROM user_info WHERE user_name = '" + user_name + "' LIMIT 1";
     conn.query(sqlStr, (error, results, fields) => {
@@ -356,7 +356,7 @@ router.post('/api/login_pwd', (req, res) => {
                     res.json({err_code: 0, message: '密码不正确!'});
                 } else {
                     req.session.userId = results[0].id;
-                    
+
                     res.json({
                         success_code: 200,
                         message: {
@@ -364,10 +364,10 @@ router.post('/api/login_pwd', (req, res) => {
                             user_name: results[0].user_name || '',
                             user_nickname: results[0].user_nickname || '',
                             user_phone: results[0].user_phone || '',
-							user_sex: results[0].user_sex || '',
-							user_address: results[0].user_address || '',
-							user_sign: results[0].user_sign || '',
-							user_birthday: results[0].user_birthday || '',
+                            user_sex: results[0].user_sex || '',
+                            user_address: results[0].user_address || '',
+                            user_sign: results[0].user_sign || '',
+                            user_birthday: results[0].user_birthday || '',
                             user_avatar: results[0].user_avatar || ''
                         },
                         info: '登录成功!'
@@ -386,7 +386,7 @@ router.post('/api/login_pwd', (req, res) => {
                                 res.json({err_code: 0, message: '注册失败'});
                             } else {
                                 results = JSON.parse(JSON.stringify(results));
-                                
+
                                 res.json({
                                     success_code: 200,
                                     message: {
@@ -406,12 +406,12 @@ router.post('/api/login_pwd', (req, res) => {
 });
 
 /**
-*  根据session中的用户id获取用户信息
-* */
+ *  根据session中的用户id获取用户信息
+ * */
 router.get('/api/user_info', (req, res) => {
     // 获取参数
-   let userId = req.query.user_id || req.session.userId;
-   
+    let userId = req.query.user_id || req.session.userId;
+
     let sqlStr = "SELECT * FROM user_info WHERE id = " + userId + " LIMIT 1";
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
@@ -447,7 +447,7 @@ router.get('/api/user_info', (req, res) => {
 router.get('/api/logout', (req, res) => {
     // 清除session中userId
     delete  req.session.userId;
-	
+
     res.json({
         success_code: 200,
         message: "退出登录成功"
@@ -477,7 +477,7 @@ router.post('/api/add_shop_cart', (req, res) => {
     let price = req.body.price;
     let buy_count = req.body.buy_count;
     let is_pay = 0; // 0 未购买 1购买
-	let counts = req.body.counts;
+    let counts = req.body.counts;
 
     let sql_str = "SELECT * FROM cart WHERE goods_id = " + goods_id + " AND user_id=" + user_id + " LIMIT 1";
     conn.query(sql_str, (error, results, fields) => {
@@ -488,16 +488,16 @@ router.post('/api/add_shop_cart', (req, res) => {
             if (results[0]) { // 商品已经存在
                 res.json({success_code: 200, message: '该商品已在购物车中'});
             } else { // 商品不存在
-				let add_sql = "INSERT INTO cart(goods_id, goods_name, thumb_url, price, buy_count, is_pay, user_id, counts) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-				let sql_params = [goods_id, goods_name, thumb_url, price, buy_count, is_pay, user_id, counts];
-				conn.query(add_sql, sql_params, (error, results, fields) => {
-					if (error) {
+                let add_sql = "INSERT INTO cart(goods_id, goods_name, thumb_url, price, buy_count, is_pay, user_id, counts) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                let sql_params = [goods_id, goods_name, thumb_url, price, buy_count, is_pay, user_id, counts];
+                conn.query(add_sql, sql_params, (error, results, fields) => {
+                    if (error) {
                         res.json({err_code: 0, message: '加入购物车失败!'});
                         console.log(error);
-					} else {
-						res.json({success_code: 200, message: '加入购物车成功!'});
-					}
-				});
+                    } else {
+                        res.json({success_code: 200, message: '加入购物车成功!'});
+                    }
+                });
             }
         }
     });
@@ -513,7 +513,7 @@ router.get('/api/cart_goods', (req, res) => {
     let sqlStr = "SELECT * FROM cart WHERE user_id =" + user_id;
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '请求购物车商品数据失败'});
         } else {
             res.json({success_code: 200, message: results});
@@ -527,12 +527,12 @@ router.get('/api/cart_goods', (req, res) => {
 router.post('/api/delete_goods', (req, res) => {
     // 获取数据
     const goods_id = req.body.goods_id;
-	const user_id = req.body.user_id;
-	
+    const user_id = req.body.user_id;
+
     let sqlStr = "DELETE FROM cart WHERE goods_id =" + goods_id + " AND user_id = " + user_id;
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '删除失败!'});
         } else {
             res.json({success_code: 200, message: '删除成功!'});
@@ -543,18 +543,18 @@ router.post('/api/delete_goods', (req, res) => {
 /*********************************** 用户中心 **************************************** */
 
 /**
- * 修改用户信息 
+ * 修改用户信息
  */
 router.post('/api/change_user_msg', (req, res) => {
     // 获取客户端传过来的商品信息
-	const form = new formidable.IncomingForm();
+    const form = new formidable.IncomingForm();
     form.uploadDir = config.uploadsAvatarPath;  // 上传图片放置的文件夹
     form.keepExtensions = true; // 保持文件的原始扩展名
     form.parse(req, (err, fields, files)=>{
         if(err){
             return next(err);
         }
-		let id = fields.id;
+        let id = fields.id;
         let user_nickname = fields.user_nickname || '';
         let user_sex = fields.user_sex || '';
         let user_address = fields.user_address || '';
@@ -562,7 +562,7 @@ router.post('/api/change_user_msg', (req, res) => {
         let user_sign = fields.user_sign || '';
         let user_avatar = 'http://localhost:' + config.port + '/avatar_uploads/avatar_default.jpg';
         if(files.user_avatar){
-            user_avatar = 'http://localhost:' + config.port + '/avatar_uploads/' + basename(files.user_avatar.path); 
+            user_avatar = 'http://localhost:' + config.port + '/avatar_uploads/' + basename(files.user_avatar.path);
         }
 
         // 验证
@@ -599,7 +599,7 @@ router.post('/api/change_user_pwd', (req, res) => {
     let sqlStr = "SELECT * FROM user_info WHERE id = " + id;
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '查询失败!'});
         } else {
             results = JSON.parse(JSON.stringify(results));
@@ -614,7 +614,7 @@ router.post('/api/change_user_pwd', (req, res) => {
                 }else if(oriPwd != results[0].user_pwd){
                     res.json({err_code: 0, message: '输入的原始密码错误!'});
                 }
-            } else { 
+            } else {
                 res.json({err_code: 0, message: '非法用户!'});
             }
         }
@@ -622,8 +622,8 @@ router.post('/api/change_user_pwd', (req, res) => {
 });
 
 /**
-  修改手机
-*/
+ 修改手机
+ */
 router.post('/api/change_user_phone', (req, res) => {
     // 获取数据
     const id = req.body.id;
@@ -643,7 +643,7 @@ router.post('/api/change_user_phone', (req, res) => {
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
             res.json({err_code: 0, message: '修改失败'});
-			console.log(error);
+            console.log(error);
         } else {
             res.json({success_code: 200, message: '修改成功'});
         }
@@ -690,7 +690,7 @@ router.post('/api/admin_login', (req, res)=>{
 router.get('/api/admin_logout', (req, res) => {
     console.log(req.session.adminId)
     delete  req.session.adminId;
-	
+
     res.json({
         success_code: 200,
         message: "退出登录成功"
@@ -698,19 +698,19 @@ router.get('/api/admin_logout', (req, res) => {
 });
 
 /**
- * 修改商品数量 
+ * 修改商品数量
  */
 router.post('/api/change_goods_count', (req, res) => {
     // 获取数据
     const goods_id = req.body.goods_id;
     const buy_count = req.body.count;
-	const user_id = req.body.user_id;
+    const user_id = req.body.user_id;
 
     let sqlStr = "UPDATE cart SET buy_count = ? WHERE goods_id = " + goods_id + " AND user_id = " + user_id;
     let strParams = [buy_count];
     conn.query(sqlStr, strParams, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '修改商品数量失败!'});
         } else {
             res.json({success_code: 200, message: '修改商品数量成功!'});
@@ -727,7 +727,7 @@ router.get('/api/admin_allusers', (req, res) => {
 
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '请求用户数据失败'});
         } else {
             results = JSON.parse(JSON.stringify(results));
@@ -743,28 +743,28 @@ router.get('/api/admin_allusers', (req, res) => {
 router.post('/api/delete_recom_goods', (req, res) => {
     // 获取数据
     const goods_id = req.body.goods_id;
-	
+
     let sqlStr = "DELETE FROM recommend WHERE goods_id =" + goods_id;
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '删除失败!'});
         } else {
-			let sqlStr2 = "DELETE FROM cart WHERE goods_id =" + goods_id;
-			conn.query(sqlStr, (error, results, fields) => {
-				if (error) {
-					console.log(error);
-					res.json({err_code: 0, message: '删除失败!'});
-				} else {
-					res.json({success_code: 200, message: '删除成功!'});
-				}
-			});
+            let sqlStr2 = "DELETE FROM cart WHERE goods_id =" + goods_id;
+            conn.query(sqlStr, (error, results, fields) => {
+                if (error) {
+                    console.log(error);
+                    res.json({err_code: 0, message: '删除失败!'});
+                } else {
+                    res.json({success_code: 200, message: '删除成功!'});
+                }
+            });
         }
     });
 });
 
 /**
- * 修改recommend商品信息 
+ * 修改recommend商品信息
  */
 router.post('/api/update_recom_goods', (req, res) => {
     // 获取数据
@@ -779,7 +779,7 @@ router.post('/api/update_recom_goods', (req, res) => {
     let strParams = [goods_name, short_name, price, counts, category];
     conn.query(sqlStr, strParams, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '修改失败!'});
         } else {
             res.json({success_code: 200, message: '修改成功!'});
@@ -792,57 +792,57 @@ router.post('/api/update_recom_goods', (req, res) => {
  */
 router.post('/api/add_shop_recom', (req, res) => {
     // 获取客户端传过来的商品信息
-	const form = new formidable.IncomingForm();
+    const form = new formidable.IncomingForm();
     form.uploadDir = config.uploadsGoodsPath;  // 上传图片放置的文件夹
     form.keepExtensions = true; // 保持文件的原始扩展名
     form.parse(req, (err, fields, files)=>{
         if(err){
             return next(err);
         }
-		let goods_id = fields.goods_id;
-		let goods_name = fields.goods_name;
-		let short_name = fields.short_name;
-		let price = fields.price;
-		let normal_price = price + 300;
-		let market_price = price + 500;
-		let sales_tip = fields.sales_tip;
-		let category = fields.category;
-		let comments_count = 0;
-		let counts = fields.counts;
-		let thumb_url = 'http://localhost:' + config.port + '/uploads/' + basename(files.goods_img.path);
-		let image_url = 'http://localhost:' + config.port + '/uploads/' + basename(files.goods_img.path);
-		let hd_thumb_url = 'http://localhost:' + config.port + '/uploads/' + basename(files.goods_img.path);
-    
-		let sql_str = "SELECT * FROM recommend WHERE goods_id = " + goods_id;
-		conn.query(sql_str, (error, results, fields) => {
-			if (error) {
-				res.json({err_code: 0, message: '服务器内部错误!'});
-			} else {
-				results = JSON.parse(JSON.stringify(results));
-				if (results[0]) { // 商品已经存在
-					res.json({success_code: 500, message: '该商品已在数据库中'});
-				} else { // 商品不存在
-					let add_sql = "INSERT INTO recommend(goods_id, goods_name, short_name, thumb_url, image_url, hd_thumb_url, price, normal_price, market_price, sales_tip, category, counts, comments_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-					let sql_params = [goods_id, goods_name, short_name, thumb_url, image_url, hd_thumb_url, price, normal_price, market_price, sales_tip, category, counts, comments_count];
-					conn.query(add_sql, sql_params, (error, results, fields) => {
-						if (error) {
-							console.log(error);
-							res.json({err_code: 0, message: '加入失败!'});
-						} else {
-							let sqlStr = "UPDATE category SET cate_counts = cate_counts + 1  WHERE cate_id = " + category;
-							conn.query(sqlStr, [], (error, results, fields) => {
-								if (error) {
-									console.log(error);
-								} else {
-									res.json({success_code: 200, message: '加入成功!'});
-								}
-							});
-						}
-					});
-				}
-			}
-		});
-	});
+        let goods_id = fields.goods_id;
+        let goods_name = fields.goods_name;
+        let short_name = fields.short_name;
+        let price = fields.price;
+        let normal_price = price + 300;
+        let market_price = price + 500;
+        let sales_tip = fields.sales_tip;
+        let category = fields.category;
+        let comments_count = 0;
+        let counts = fields.counts;
+        let thumb_url = 'http://localhost:' + config.port + '/uploads/' + basename(files.goods_img.path);
+        let image_url = 'http://localhost:' + config.port + '/uploads/' + basename(files.goods_img.path);
+        let hd_thumb_url = 'http://localhost:' + config.port + '/uploads/' + basename(files.goods_img.path);
+
+        let sql_str = "SELECT * FROM recommend WHERE goods_id = " + goods_id;
+        conn.query(sql_str, (error, results, fields) => {
+            if (error) {
+                res.json({err_code: 0, message: '服务器内部错误!'});
+            } else {
+                results = JSON.parse(JSON.stringify(results));
+                if (results[0]) { // 商品已经存在
+                    res.json({success_code: 500, message: '该商品已在数据库中'});
+                } else { // 商品不存在
+                    let add_sql = "INSERT INTO recommend(goods_id, goods_name, short_name, thumb_url, image_url, hd_thumb_url, price, normal_price, market_price, sales_tip, category, counts, comments_count) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    let sql_params = [goods_id, goods_name, short_name, thumb_url, image_url, hd_thumb_url, price, normal_price, market_price, sales_tip, category, counts, comments_count];
+                    conn.query(add_sql, sql_params, (error, results, fields) => {
+                        if (error) {
+                            console.log(error);
+                            res.json({err_code: 0, message: '加入失败!'});
+                        } else {
+                            let sqlStr = "UPDATE category SET cate_counts = cate_counts + 1  WHERE cate_id = " + category;
+                            conn.query(sqlStr, [], (error, results, fields) => {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    res.json({success_code: 200, message: '加入成功!'});
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    });
 });
 
 
@@ -851,12 +851,12 @@ router.post('/api/add_shop_recom', (req, res) => {
  */
 router.post('/api/delete_all_goods', (req, res) => {
     // 获取数据
-	const user_id = req.body.user_id;
-	
+    const user_id = req.body.user_id;
+
     let sqlStr = "DELETE FROM cart WHERE user_id = " + user_id;
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
-			console.log(error);
+            console.log(error);
             res.json({err_code: 0, message: '删除失败!'});
         } else {
             res.json({success_code: 200, message: '删除成功!'});

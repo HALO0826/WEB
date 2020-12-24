@@ -21,10 +21,14 @@
         <div class="pro_show">
 
           <ProductItem v-for="(goods) in recommendshoplist" :key="goods.goods_id" :pro="goods"/>
+          <waterfall :col="4" :width="itemWidth":gutterWidth="gutterWidth" : data="mdata">
+            <template>
+              <div v-for="(index) in mdata":key="mdata">
+                <p>{{index}}</p>
+              </div>
+            </template>
+          </waterfall>
 
-
-
-        </div>
       </div>
     </div>
 		<div id="footer">
@@ -35,11 +39,13 @@
 			</ul>
 		</div>
   </div>
+  </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
   import ProductItem from '../../components/ProductItem/ProductItem'
+  //import waterfall from "vue-waterfall2";
 
   export default {
     data(){
@@ -47,10 +53,12 @@
         activeIndex: 1,  // 当前页码
 			currentCate: 1,  // 当前分类
 			pageSize: 3,
+        mdata:[1,2,3,4,5,6,7,8,9],
       }
     },
     components: {
-      ProductItem
+      ProductItem,
+      //waterfall
     },
     computed: {
       ...mapState(['categoryList','userInfo','recommendshoplist']),
@@ -61,7 +69,15 @@
 					arr.push(page);
         });
         return arr;
-      }
+      },
+
+      itemWidth() {
+        return (334 * 0.5 * (document.documentElement.clientWidth / 375))
+      },
+
+      gutterWidth() {
+        return (36 * 0.5 * (document.documentElement.clientWidth / 375))
+      },
     },
     created() {
         this.currentCate = Number(this.$route.params.id);
@@ -111,6 +127,25 @@
           this.activeIndex = index;
           this.$router.replace('/search/' + this.currentCate + "/" + this.activeIndex);
         }
+      },
+      scroll(scrollData) {
+
+        console.log(scrollData)
+
+      },
+      switchCol(col) {
+
+        this.col = col
+
+        // console.log(this.col)
+
+      },
+      loadmore(index) {
+
+        //这里是当滑动到底部时，再次请求接口，并且传page，返回的数据给dataList赋值
+        console.log(index)
+        //简单粗暴的有了分页功能
+
       },
     },
   }
@@ -245,5 +280,111 @@ ul.pagination li a:hover:not(.pag_active){
 }
 div.center{
 	text-align: center;
+}
+
+.container-water-fall {
+
+  /* // padding: 0 28px; */
+
+  padding: 10px 3%;
+
+  width: 100vw;
+
+  box-sizing: border-box;
+
+  /* background: #fafafa !important; */
+
+}
+
+.cell-item {
+
+  /* width: 100%; */
+
+  /* margin-bottom: 18px; */
+
+  background: #ffffff;
+
+  border-radius: 10px;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  margin:10% 0;
+
+}
+
+.cell-item img {
+
+  /*  border-radius: 12px 12px 0 0; */
+
+  width: 100%;
+
+  height: auto;
+
+  display: block;
+
+}
+
+.item-descA {
+
+  font-size: 17px;
+
+  color:rgba(46,44,42,1);
+
+  line-height: 17px;
+
+  font-weight: bold;
+
+  margin:11.5px 0 13px 9px;
+
+}
+
+.item-descB {
+
+  font-size:12px;
+
+  font-weight:500;
+
+  color:rgba(89,89,89,1);
+
+  line-height:17px;
+
+  margin:11.5px 0 13px 9px;
+
+}
+
+.item-footer {
+
+  margin-top: 22px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+}
+
+.name {
+
+  max-width: 150px;
+
+  margin-left: 10px;
+
+  font-size: 14px;
+
+  color: #999999;
+
+}
+
+.tech-list-ll .tab-bottom{
+
+  padding:10px 0 !important;
+
+  height: 0 !important;
+
+  background: #fafafa !important;
+
 }
 </style>

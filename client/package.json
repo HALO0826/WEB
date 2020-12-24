@@ -16,7 +16,8 @@
     "popper.js": "^1.16.1",
     "qs": "^6.9.4",
     "vue": "^2.6.11",
-    "vue-axios": "^3.2.0"
+    "vue-axios": "^3.2.0",
+    "vue-waterfall2": "^1.10.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
