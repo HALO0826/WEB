@@ -110,6 +110,7 @@ router.get('/api/allgoods', (req, res) => {
 
     let sqlStr = 'SELECT * FROM recommend';
 
+
     conn.query(sqlStr, (error, results, fields) => {
         if (error) {
 			console.log(error);

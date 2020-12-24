@@ -30,27 +30,27 @@ Vue.use(VueRouter);
 export default  new VueRouter({
   // 3.1 配置一级路由
   routes: [
-	{
-	  path: '/home',
-	  component: Home,
-	  meta: {showHeaderTop: true, showHeaderSearch: true}
+      {
+          path: '/home', 
+          component: Home,
+meta: {showHeaderTop: true, showHeaderSearch: true}
 	},
 	{
-	  path: '/login',
-	  component: Login
+path: '/login',
+component: Login
 	},
 	{
-	  path: '/search/:id/:pageNo',
-	  component: Search,
-	  meta: {showHeaderTop: true, showHeaderSearch: true}
+path: '/search/:id/:pageNo',
+component: Search,
+meta: {showHeaderTop: true, showHeaderSearch: true}
   },
   {
-	  path: '/goods/:id',
-	  component: Goods,
-	  meta: {showHeaderTop: true}
+path: '/goods/:id',
+component: Goods,
+meta: {showHeaderTop: true}
   },
   {
-	  path: '/me',
+path: '/me',
     component: Me,
     children: [
       {path: 'profile', component: Profile},
@@ -62,16 +62,16 @@ export default  new VueRouter({
     ],
   },
   {
-	  path: '/shopcar',
-	  component: ShopCar,
-	  meta: {showHeaderTop: true}
+path: '/shopcar',
+component: ShopCar,
+meta: {showHeaderTop: true}
 	},
 	{
-	  path: '/adminlogin',
-	  component: AdminLogin
+path: '/adminlogin',
+component: AdminLogin
   },
   {
-	  path: '/admin',
+path: '/admin',
     component: Admin,
     children: [
       {path: 'adminsales', component: AdminSales},
@@ -83,13 +83,13 @@ export default  new VueRouter({
     ],
   },
   {
-	  path: '/searchdetail',
+path: '/searchdetail',
     component: SearchDetail,
-	  meta: {showHeaderTop: true, showHeaderSearch: true}
+meta: {showHeaderTop: true, showHeaderSearch: true}
   },
 	{
-	  path: '/',
-	  redirect: '/home'
+path: '/',
+redirect: '/home'
 	},
   ]
 });

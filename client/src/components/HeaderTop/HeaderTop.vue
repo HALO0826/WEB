@@ -1,7 +1,7 @@
 <template>
 		<div class="header_nav">
 			<div>
-        <p>嗨~欢迎来到西二商城</p>
+        <p>嗨~欢迎来到大学生二手交易平台</p>
         <div class="locationWrapper">
            <svg viewBox="0 0 32 32" class="icon iconLocation">
                 <path fill="#81838E" fill-rule="evenodd"
@@ -35,8 +35,6 @@
 				<li><a @click.prevent="goMe">个人中心</a></li>
         <li><a @click.prevent="goShopCar">我的购物车</a></li>
 				<li><a @click.prevent="goAdmin">管理员通道</a></li>
-				<li><a>联系客服</a></li>
-				<li><a>网站导航</a></li>
 			</ul>
 		</div>
 </template>
@@ -65,10 +63,12 @@
     methods:{
       ...mapActions(["logOut"]),
 
+      // eslint-disable-next-line no-unused-vars
       handleAreaChange(value) {
         //console.log(this.selectedOptions);
       },
       getLocation(){
+        // eslint-disable-next-line no-undef
         let geolocation = new qq.maps.Geolocation("3PXBZ-DOQK6-FQISF-M2BXT-MOETT-L6FIM", "myapp");
         geolocation.getLocation(this.showPosition, this.showError);
       },
@@ -90,6 +90,7 @@
           type: 'success',
           message: '退出成功!'
           });
+          // eslint-disable-next-line no-unused-vars
           let result = this.logOut({});
           window.localStorage.removeItem("userInfo");
         }).catch(() => {
@@ -106,7 +107,7 @@
           MessageBox({
             type: 'info',
             message: "请先登录!",
-			      showClose: true,
+            showClose: true,
           });
         }
       },
@@ -125,7 +126,7 @@
           MessageBox({
             type: 'info',
             message: "请先登录!",
-			      showClose: true,
+            showClose: true,
           });
         }
       },
