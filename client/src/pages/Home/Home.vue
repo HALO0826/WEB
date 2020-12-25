@@ -32,7 +32,7 @@
             <img :src="userInfo.user_avatar" v-if="userInfo.user_avatar"/>
 						<img src="./img/no_login.jpg" v-else/>
 					</div>
-					<p>Hi~ 欢迎来到大学生二手交易平台</p>
+					<p>Hi~ 欢迎来到转交</p>
 					<p v-if="!userInfo.id"><router-link to="/login">登录</router-link><router-link to="/login">注册</router-link></p>
 					<p v-else class="userIn">
             <a v-if="userInfo.user_nickname">您好,{{ userInfo.user_nickname }}</a>

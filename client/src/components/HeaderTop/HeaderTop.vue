@@ -1,13 +1,13 @@
 <template>
 		<div class="header_nav">
 			<div>
-        <p>嗨~欢迎来到大学生二手交易平台</p>
+        <p>嗨~欢迎来到转交</p>
         <div class="locationWrapper">
            <svg viewBox="0 0 32 32" class="icon iconLocation">
                 <path fill="#81838E" fill-rule="evenodd"
                       d="M14.521 30.445c.817.738 2.142.75 2.958 0 0 0 11.521-9.82 11.521-17.158C29 5.95 23.18 0 16 0S3 5.949 3 13.287c0 7.339 11.521 17.158 11.521 17.158zM16 18a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"></path>
             </svg>
-            <span class="address">{{selectedOptions[2] || city || '福州市'}}</span>
+            <span class="address">{{selectedOptions[2] || city || '北京市'}}</span>
             <svg viewBox="0 0 32 32" class="icon iconArrow">
                 <path fill="#81838E" fill-rule="evenodd"
                       d="M14.724 19.17c.783.784 2.05.788 2.837 0l5.047-5.047c1.173-1.172.776-2.123-.869-2.123H10.545c-1.652 0-2.04.952-.869 2.123l5.048 5.048z"></path>

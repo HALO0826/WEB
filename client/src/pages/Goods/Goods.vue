@@ -9,7 +9,7 @@
 				<div class="pro_meg">
 					<div class="pro_meg_hd">
 						<h1>
-					 		{{goodsDetail[0].goods_name}}
+              {{goodsDetail[0].goods_name}}
 						</h1>
 					</div>
 					<div class="pro_meg_price">
@@ -43,8 +43,8 @@
 					</div>
 					<div class="pro_meg_deliver">
 						<dl>
-							<dt>交易地点</dt>
-							<dd>&nbsp;&nbsp;逸夫楼&nbsp;&nbsp;&nbsp;</dd>
+							<dt>运费</dt>
+							<dd>福建福州&nbsp;&nbsp;至&nbsp;&nbsp;福建福州&nbsp;&nbsp;&nbsp;快递:0.00</dd>
 						</dl>
 					</div>
 					<div class="pro_meg_console">
@@ -113,7 +113,6 @@
 <script>
   import {postComment, addGoodsToCart} from './../../api/index';
   import { MessageBox } from 'element-ui';
-  import {mapActions} from 'vuex'
   import {mapState} from 'vuex'
 
   export default {
@@ -157,7 +156,7 @@
            MessageBox({
               type: 'info',
               message: "评论不得为空",
-			        showClose: true,
+             showClose: true,
            });
            return;
         }
@@ -166,7 +165,7 @@
           MessageBox({
               type: 'success',
               message: "发布成功",
-			        showClose: true,
+            showClose: true,
           });
           this.textarea = '';
           this.$store.dispatch('reqGoodsComment', {
@@ -176,7 +175,7 @@
           MessageBox({
               type: 'info',
               message: "发布失败",
-			        showClose: true,
+            showClose: true,
           });
         }
       },
@@ -190,7 +189,7 @@
              MessageBox({
               type: 'success',
               message: result.message,
-			        showClose: true,
+               showClose: true,
             });
             let user_id = this.userInfo.id;
             // 请求商品数据
@@ -279,13 +278,12 @@
 .pro_img>.tb_booth{
 	position: relative;
   z-index: 1;
-  alignment: center;
 }
 .tb_booth>.pro_middle_img{
-	 width: auto;
+  width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 250px;
+  max-height: 100%;
 }
 .pro_detail>.pro_meg{
 	margin: 0 0 0 520px;
