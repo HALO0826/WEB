@@ -279,12 +279,13 @@
 .pro_img>.tb_booth{
 	position: relative;
   z-index: 1;
+  alignment: center;
 }
 .tb_booth>.pro_middle_img{
 	 width: auto;
   height: auto;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 250px;
 }
 .pro_detail>.pro_meg{
 	margin: 0 0 0 520px;
