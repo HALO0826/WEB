@@ -40,9 +40,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(config.publicPath));
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     next(createError(404));
-});
+});*/
 
 // error handler
 app.use((err, req, res, next) => {

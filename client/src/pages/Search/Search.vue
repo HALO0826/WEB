@@ -20,31 +20,40 @@
         </div>
         <div class="pro_show">
 
-          <ProductItem v-for="(goods) in recommendshoplist" :key="goods.goods_id" :pro="goods"/>
-          <waterfall :col="4" :width="itemWidth":gutterWidth="gutterWidth" : data="mdata">
+          <div class="container-water-fall">
+          <!--<ProductItem v-for="(goods) in recommendshoplist" :key="goods.goods_id" :pro="goods"/>-->
+          <waterfall :col='col' :itemWidth="itemWidth" :gutterWidth="gutterWidth" :data="recommendshoplist" @loadmore="loadmore(activeIndex)" @scroll="scroll">
             <template>
-              <div v-for="(index) in mdata":key="mdata">
-                <p>{{index}}</p>
+              <div v-for="(goods) in recommendshoplist" :key="goods.goodsId">
+                <ProductItemWaterfall :pro="goods"/>
               </div>
             </template>
           </waterfall>
 
+            <div id="footer">
+              <ul class="pagination">
+                <li><a class="pag_back" @click="getMore(activeIndex - 1)">«</a></li>
+                <li><a class="pag_a" v-for="index in catePages[this.currentCate - 1]" :key="index" :class="{pag_active: activeIndex === index}" @click="getMore(index)">{{index}}</a></li>
+                <li><a class="pag_go" @click="getMore(activeIndex + 1)">»</a></li>
+              </ul>
+            </div>
+
+
       </div>
-    </div>
-		<div id="footer">
-			<ul class="pagination">
-				<li><a class="pag_back" @click="getMore(activeIndex - 1)">«</a></li>
-				<li><a class="pag_a" v-for="index in catePages[this.currentCate - 1]" :key="index" :class="{pag_active: activeIndex === index}" @click="getMore(index)">{{index}}</a></li>
-				<li><a class="pag_go" @click="getMore(activeIndex + 1)">»</a></li>
-			</ul>
-		</div>
+        </div>
+      </div>
+
+
+
+
   </div>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
-  import ProductItem from '../../components/ProductItem/ProductItem'
+  //import ProductItem from '../../components/ProductItem/ProductItem'
+  import ProductItemWaterfall from "@/components/ProductItem/ProductItemWaterfall";
   //import waterfall from "vue-waterfall2";
 
   export default {
@@ -52,13 +61,13 @@
       return{
         activeIndex: 1,  // 当前页码
 			currentCate: 1,  // 当前分类
-			pageSize: 3,
-        mdata:[1,2,3,4,5,6,7,8,9],
+			pageSize: 100,
+        col:5,
+        showItemNum:5,
       }
     },
     components: {
-      ProductItem,
-      //waterfall
+      ProductItemWaterfall,
     },
     computed: {
       ...mapState(['categoryList','userInfo','recommendshoplist']),
@@ -126,26 +135,20 @@
           });
           this.activeIndex = index;
           this.$router.replace('/search/' + this.currentCate + "/" + this.activeIndex);
+
         }
       },
       scroll(scrollData) {
-
         console.log(scrollData)
-
       },
       switchCol(col) {
-
         this.col = col
-
-        // console.log(this.col)
-
+        console.log(this.col)
       },
       loadmore(index) {
 
         //这里是当滑动到底部时，再次请求接口，并且传page，返回的数据给dataList赋值
         console.log(index)
-        //简单粗暴的有了分页功能
-
       },
     },
   }
@@ -154,16 +157,13 @@
 <style scoped>
 #container{
 	position: relative;
-	margin: 30px auto;
-	width: 100%;
 }
 .product{
-	margin: 0 auto;
-	width: 980px;
+  margin-top: 5%;
+  margin-left: 10%;
 }
 .product>.pro_line{
 	margin-bottom: 20px;
-	width: 980px;
 	height: 50px;
 	line-height: 50px;
 	font-size: 26px;
@@ -196,7 +196,6 @@
 .product>.pro_show{
 	margin: 0 auto;
 	padding-left: 20px;
-	width: 980px;
 	height: 300px;
 }
 .pro_show>.pro{
@@ -207,19 +206,6 @@
 	width: 300px;
 	height: 200px;
 	border: 1px solid gainsboro;
-}
-.pro>.pro_img{
-	margin: 20px;
-	width: 120px;
-	height: 120px;
-}
-.pro>.pro_text{
-	position: absolute;
-	top: 30px;
-  right: 0;
-	height: 130px;
-	width: 140px;
-	line-height: 25px;
 }
 .pro_text>p{
 	margin-bottom: 10px;
@@ -235,12 +221,7 @@
 	font-size: 12px;
 	color: #999;
 }
-.pro>.add_btn{
-	float: right;
-	position: absolute;
-	bottom: 15px;
-	right: 20px;
-}
+
 .add_btn>a{
 	display: block;
 	width: 120px;
@@ -288,7 +269,7 @@ div.center{
 
   padding: 10px 3%;
 
-  width: 100vw;
+  width: 100%;
 
   box-sizing: border-box;
 
@@ -296,22 +277,8 @@ div.center{
 
 }
 
-.cell-item {
-
-  /* width: 100%; */
-
-  /* margin-bottom: 18px; */
-
-  background: #ffffff;
-
-  border-radius: 10px;
-
-  overflow: hidden;
-
-  box-sizing: border-box;
-
-  margin:10% 0;
-
+vue-waterfall-column{
+  width: 25%;
 }
 
 .cell-item img {
@@ -323,58 +290,6 @@ div.center{
   height: auto;
 
   display: block;
-
-}
-
-.item-descA {
-
-  font-size: 17px;
-
-  color:rgba(46,44,42,1);
-
-  line-height: 17px;
-
-  font-weight: bold;
-
-  margin:11.5px 0 13px 9px;
-
-}
-
-.item-descB {
-
-  font-size:12px;
-
-  font-weight:500;
-
-  color:rgba(89,89,89,1);
-
-  line-height:17px;
-
-  margin:11.5px 0 13px 9px;
-
-}
-
-.item-footer {
-
-  margin-top: 22px;
-
-  position: relative;
-
-  display: flex;
-
-  align-items: center;
-
-}
-
-.name {
-
-  max-width: 150px;
-
-  margin-left: 10px;
-
-  font-size: 14px;
-
-  color: #999999;
 
 }
 

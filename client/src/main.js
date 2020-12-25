@@ -7,7 +7,10 @@ import router from './router/index'
 
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import waterfall from 'vue-waterfall2'
 Vue.use(ElementUI);
+
+Vue.use(waterfall)
 
 // 配置图片懒加载
 import VueLazyload from 'vue-lazyload'
