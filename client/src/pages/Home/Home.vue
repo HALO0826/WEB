@@ -9,21 +9,21 @@
 						商品分类
 					</div>
 					<el-menu
-					  class="el-menu-vertical-demo"
-					  background-color="#545c64"
-					  text-color="#fff">
-					  <el-menu-item index="cate.cate_id" v-for="(cate) in categoryList" :key="cate.cate_id" @click="getRList(cate.cate_id)">
+              class="el-menu-vertical-demo"
+              background-color="#545c64"
+              text-color="#fff">
+            <el-menu-item index="cate.cate_id" v-for="(cate) in categoryList" :key="cate.cate_id" @click="getRList(cate.cate_id)">
               <i :class="cate.cate_icon"></i>
               <span slot="title">{{cate.cate_name}}</span>
-					  </el-menu-item>
+              </el-menu-item>
 					</el-menu>
-			  </el-col>
-			  <!--轮播图-->
+          </el-col>
+        <!--轮播图-->
 				<el-col :span="14">
 					<el-carousel v-if="homecasual.length > 0">
-					  <el-carousel-item v-for="(casual) in homecasual" :key="casual.id">
+  <el-carousel-item v-for="(casual) in homecasual" :key="casual.id">
 						<img :src="casual.imgurl" alt="">
-					  </el-carousel-item>
+  </el-carousel-item>
 					</el-carousel>
 				</el-col>
 				<!-- 登录信息板块 -->
@@ -32,7 +32,7 @@
             <img :src="userInfo.user_avatar" v-if="userInfo.user_avatar"/>
 						<img src="./img/no_login.jpg" v-else/>
 					</div>
-					<p>Hi~ 欢迎来到西二商城</p>
+					<p>Hi~ 欢迎来到大学生二手交易平台</p>
 					<p v-if="!userInfo.id"><router-link to="/login">登录</router-link><router-link to="/login">注册</router-link></p>
 					<p v-else class="userIn">
             <a v-if="userInfo.user_nickname">您好,{{ userInfo.user_nickname }}</a>
@@ -63,13 +63,13 @@
 		</div>
 
 		<!--左侧微型购物车区域-->
-    <DrawerSection v-if="this.$route.path.indexOf('/home') != -1" @goShopCar="goShopCar"/>
+    <!--<DrawerSection v-if="this.$route.path.indexOf('/home') != -1" @goShopCar="goShopCar"/>-->
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
-  import DrawerSection from './children/DrawerSection/DrawerSection'
+  //import DrawerSection from './children/DrawerSection/DrawerSection'
   import ProductItem from '../../components/ProductItem/ProductItem'
   import { MessageBox } from 'element-ui'
 
@@ -78,7 +78,7 @@
       ...mapState(['homecasual','categoryList','homeshoplist','userInfo'])
     },
     components: {
-      DrawerSection,
+      //DrawerSection,
       ProductItem
     },
     methods:{
@@ -92,7 +92,7 @@
           MessageBox({
             type: 'info',
             message: "请先登录!",
-			      showClose: true,
+            showClose: true,
           });
         }
       },

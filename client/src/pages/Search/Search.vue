@@ -4,56 +4,89 @@
 			<div class="product">
 				<div class="pro_line">
 					<h3 v-text="this.categoryList[this.currentCate-1].cate_name"></h3>
+
+          <!--
 					<el-dropdown @command="handleCommand">
-					  <span class="el-dropdown-link">
-						  更多类别<i class="el-icon-arrow-down el-icon--right"></i>
-					  </span>
-					  <el-dropdown-menu slot="dropdown">
-						  <el-dropdown-item v-for="(cate, index) in categoryList" :key="index" :command="index+1">{{ cate.cate_name }}</el-dropdown-item>
-					  </el-dropdown-menu>
-					</el-dropdown>
-					<router-link to="/home" class="goHome">返回首页</router-link>
-				</div>
-				<div class="pro_show">
-          			<ProductItem v-for="(goods) in recommendshoplist" :key="goods.goods_id" :pro="goods"/>
-				</div>
-			</div>
-		</div>
-		<div id="footer">
-			<ul class="pagination">
-				<li><a class="pag_back" @click="getMore(activeIndex - 1)">«</a></li>
-				<li><a class="pag_a" v-for="index in catePages[this.currentCate - 1]" :key="index" :class="{pag_active: activeIndex === index}" @click="getMore(index)">{{index}}</a></li>
-				<li><a class="pag_go" @click="getMore(activeIndex + 1)">»</a></li>
-			</ul>
-		</div>
+					<span class="el-dropdown-link">
+					更多类别<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="(cate, index) in categoryList" :key="index" :command="index+1">{{ cate.cate_name }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          -->
+
+          <router-link to="/home" class="goHome">返回首页</router-link>
+        </div>
+        <div class="pro_show">
+
+          <div class="container-water-fall">
+          <!--<ProductItem v-for="(goods) in recommendshoplist" :key="goods.goods_id" :pro="goods"/>-->
+          <waterfall :col='col' :itemWidth="itemWidth" :gutterWidth="gutterWidth" :data="recommendshoplist" @loadmore="loadmore(activeIndex)" @scroll="scroll">
+            <template>
+              <div v-for="(goods) in recommendshoplist" :key="goods.goodsId">
+                <ProductItemWaterfall :pro="goods"/>
+              </div>
+            </template>
+          </waterfall>
+
+            <div id="footer">
+              <ul class="pagination">
+                <li><a class="pag_back" @click="getMore(activeIndex - 1)">«</a></li>
+                <li><a class="pag_a" v-for="index in catePages[this.currentCate - 1]" :key="index" :class="{pag_active: activeIndex === index}" @click="getMore(index)">{{index}}</a></li>
+                <li><a class="pag_go" @click="getMore(activeIndex + 1)">»</a></li>
+              </ul>
+            </div>
+
+
+      </div>
+        </div>
+      </div>
+
+
+
+
+  </div>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
-  import ProductItem from '../../components/ProductItem/ProductItem'
+  //import ProductItem from '../../components/ProductItem/ProductItem'
+  import ProductItemWaterfall from "@/components/ProductItem/ProductItemWaterfall";
+  //import waterfall from "vue-waterfall2";
 
   export default {
     data(){
       return{
         activeIndex: 1,  // 当前页码
 			currentCate: 1,  // 当前分类
-			pageSize: 3,
-      	}
+			pageSize: 100,
+        col:5,
+        showItemNum:5,
+      }
     },
     components: {
-      ProductItem
+      ProductItemWaterfall,
     },
     computed: {
       ...mapState(['categoryList','userInfo','recommendshoplist']),
       catePages(){
         let arr = [];
-        this.categoryList.forEach((cate, index)=>{
+        this.categoryList.forEach((cate)=>{
 					let page = Math.ceil(cate.cate_counts / this.pageSize);
 					arr.push(page);
         });
         return arr;
-      }
+      },
+
+      itemWidth() {
+        return (334 * 0.5 * (document.documentElement.clientWidth / 375))
+      },
+
+      gutterWidth() {
+        return (36 * 0.5 * (document.documentElement.clientWidth / 375))
+      },
     },
     created() {
         this.currentCate = Number(this.$route.params.id);
@@ -102,7 +135,20 @@
           });
           this.activeIndex = index;
           this.$router.replace('/search/' + this.currentCate + "/" + this.activeIndex);
+
         }
+      },
+      scroll(scrollData) {
+        console.log(scrollData)
+      },
+      switchCol(col) {
+        this.col = col
+        console.log(this.col)
+      },
+      loadmore(index) {
+
+        //这里是当滑动到底部时，再次请求接口，并且传page，返回的数据给dataList赋值
+        console.log(index)
       },
     },
   }
@@ -111,16 +157,13 @@
 <style scoped>
 #container{
 	position: relative;
-	margin: 30px auto;
-	width: 100%;
 }
 .product{
-	margin: 0 auto;
-	width: 980px;
+  margin-top: 5%;
+  margin-left: 10%;
 }
 .product>.pro_line{
 	margin-bottom: 20px;
-	width: 980px;
 	height: 50px;
 	line-height: 50px;
 	font-size: 26px;
@@ -153,7 +196,6 @@
 .product>.pro_show{
 	margin: 0 auto;
 	padding-left: 20px;
-	width: 980px;
 	height: 300px;
 }
 .pro_show>.pro{
@@ -164,19 +206,6 @@
 	width: 300px;
 	height: 200px;
 	border: 1px solid gainsboro;
-}
-.pro>.pro_img{
-	margin: 20px;
-	width: 120px;
-	height: 120px;
-}
-.pro>.pro_text{
-	position: absolute;
-	top: 30px;
-  right: 0;
-	height: 130px;
-	width: 140px;
-	line-height: 25px;
 }
 .pro_text>p{
 	margin-bottom: 10px;
@@ -192,12 +221,7 @@
 	font-size: 12px;
 	color: #999;
 }
-.pro>.add_btn{
-	float: right;
-	position: absolute;
-	bottom: 15px;
-	right: 20px;
-}
+
 .add_btn>a{
 	display: block;
 	width: 120px;
@@ -237,5 +261,45 @@ ul.pagination li a:hover:not(.pag_active){
 }
 div.center{
 	text-align: center;
+}
+
+.container-water-fall {
+
+  /* // padding: 0 28px; */
+
+  padding: 10px 3%;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  /* background: #fafafa !important; */
+
+}
+
+vue-waterfall-column{
+  width: 25%;
+}
+
+.cell-item img {
+
+  /*  border-radius: 12px 12px 0 0; */
+
+  width: 100%;
+
+  height: auto;
+
+  display: block;
+
+}
+
+.tech-list-ll .tab-bottom{
+
+  padding:10px 0 !important;
+
+  height: 0 !important;
+
+  background: #fafafa !important;
+
 }
 </style>
