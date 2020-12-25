@@ -2,10 +2,10 @@
   "name": "web-server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "set PORT=3000 && nodemon server.js",
+    "dev": "set PORT=3000 && nodemon app.js",
     "build": "babel src -d dist",
     "start": "node dist/app.js"
   },

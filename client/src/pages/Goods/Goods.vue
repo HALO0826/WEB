@@ -43,8 +43,8 @@
 					</div>
 					<div class="pro_meg_deliver">
 						<dl>
-							<dt>运费</dt>
-							<dd>福建福州&nbsp;&nbsp;至&nbsp;&nbsp;福建福州&nbsp;&nbsp;&nbsp;快递:0.00</dd>
+							<dt>交易地点</dt>
+							<dd>&nbsp;&nbsp;逸夫楼&nbsp;&nbsp;&nbsp;</dd>
 						</dl>
 					</div>
 					<div class="pro_meg_console">
